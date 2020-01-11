@@ -17,6 +17,7 @@ int main(void) {
 	DDRA = 0x00; PORTA = 0xFF; //configre port A's 8 pins as inputs
 	DDRC = 0xFF; PORTC = 0x00; //configure pport B's 8 pins as outputs, initialize to 00s
 	unsigned char tmpA = 0x00; //Temporary variable to hold the value of A
+	unsigned short spaces_full = 0x80; //Temporary variable that PORTC will read from
 	unsigned char cntavail = 0x00; //value to be written to C
 	unsigned char parking_spaces = 0x04; //number of parking spots 
    /* Insert your solution below */
@@ -27,14 +28,12 @@ int main(void) {
 	//filter correct values from input, e.g. 0111 is read as 3 parking spaces not 7 parking spaces
 	cntavail = parking_spaces - (((tmpA & 0x08) && 1) + ((tmpA & 0x04) && 1) + ((tmpA & 0x02) && 1) + ((tmpA & 0x01) && 1));
 	
+
 	//write output
-	//
-	//Swet PC7 to 1 if lot is full
+	//Set PC7 to 1 if lot is full
 	if (cntavail == 0x00){
-		PORTC = (PORTC & 0x7F) | 0x80;
-		PORTC = (PORTC & 0xF0) | cntavail;
+		PORTC = 0x80;
 	}
-	//Write available parking spots to PC3...PC0
 	else {
 		PORTC = (PORTC & 0xF0) | cntavail;
 	} 
