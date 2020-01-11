@@ -15,21 +15,29 @@
 int main(void) {
     /* Insert DDR and PORT initializations */
 	DDRA = 0x00; PORTA = 0xFF; //configre port A's 8 pins as inputs
-	DDRB = 0xFF; PORTB = 0x00; //configure pport B's 8 pins as outputs, initialize to 00s
-	unsigned char tmpA = 0x00; //Temporary variable to hold the value of B
-	unsigned char tmpB = 0x00; //Temporary variable to hold the value of A
+	DDRC = 0xFF; PORTC = 0x00; //configure pport B's 8 pins as outputs, initialize to 00s
+	unsigned char tmpA = 0x00; //Temporary variable to hold the value of A
+	unsigned char cntavail = 0x00; //value to be written to C
+	unsigned char parking_spaces = 0x04; //number of parking spots 
    /* Insert your solution below */
     while (1) {
-	//1) Read input
-	tmpA = PINA & 0x03;
-	//if PA1PA0 = 01,set PB0 = 1  else = 0 
-	if (tmpA == 0x01) {
-		tmpB = (tmpB & 0xFE) | 0x01; // Set tmpB to bbbbbbb1
-	}else{
-		tmpB = (tmpB & 0xFE) | 0x00; // sets tmpB to bbbbbbb0
-	}
+	// Read input
+	tmpA = PINA & 0x0F;
+	
+	//filter correct values from input, e.g. 0111 is read as 3 parking spaces not 7 parking spaces
+	cntavail = parking_spaces - (((tmpA & 0x08) && 1) + ((tmpA & 0x04) && 1) + ((tmpA & 0x02) && 1) + ((tmpA & 0x01) && 1));
+	
 	//write output
-	PORTB = tmpB;
+	//
+	//Swet PC7 to 1 if lot is full
+	if (cntavail == 0x00){
+		PORTC = (PORTC & 0x7F) | 0x80;
+		PORTC = (PORTC & 0xF0) | cntavail;
+	}
+	//Write available parking spots to PC3...PC0
+	else {
+		PORTC = (PORTC & 0xF0) | cntavail;
+	} 
     }
     return 1;
 }
