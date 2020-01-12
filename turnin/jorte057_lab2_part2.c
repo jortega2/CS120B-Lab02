@@ -23,20 +23,12 @@ int main(void) {
     while (1) {
 	// Read input
 	tmpA = PINA & 0x0F;
-	PORTC = 0x00; // reset to 00 for test.gdb
-
+	
 	//filter correct values from input, e.g. 0111 is read as 3 parking spaces not 7 parking spaces
 	cntavail = parking_spaces - (((tmpA & 0x08) && 1) + ((tmpA & 0x04) && 1) + ((tmpA & 0x02) && 1) + ((tmpA & 0x01) && 1));
 	
-
 	//write output
-	//Set PC7 to 1 if lot is full or display number of open spaces
-	if (cntavail == 0x00){
-		PORTC = (PORTC & 0x7F) | 0x80;
-	}
-	else {
-		PORTC = (PORTC & 0xF0) | cntavail;
-	} 
+	PORTC = cntavail;
     }
     return 1;
 }
