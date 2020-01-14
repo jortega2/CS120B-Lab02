@@ -143,48 +143,7 @@ end
 #   expectPORTx <val>
 #       With x as the port (A,B,C,D)
 #       The value the port is epected to have. If not it will print the erroneous actual value
-#       val is unsigned
 define expectPORTA
-    set $actual = {unsigned char}0x800022
-    if $actual != $arg0
-        set $passed = 0
-        echo \n\tExpected $arg0 \n\t
-        echo PORTA '
-        x/1xb 0x800022
-    end
-end
-define expectPORTB
-    set $actual = {unsigned char}0x800025
-    if $actual != $arg0
-        set $passed = 0
-        echo \n\tExpected $arg0 \n\t
-        echo PORTB '
-        x/1xb 0x800025
-    end
-end
-define expectPORTC
-    set $actual = {unsigned char}0x800028
-    if $actual != $arg0
-        set $passed = 0
-        echo \n\tExpected $arg0 \n\t
-        echo PORTC '
-        x/1xb 0x800028
-    end
-end
-define expectPORTD
-    set $actual = {unsigned char}0x80002B
-    if $actual != $arg0
-        set $passed = 0
-        echo \n\tExpected $arg0 \n\t
-        echo PORTD '
-        x/1xb 0x80002B
-    end
-end
-#   expectSignedPORTx <val>
-#       With x as the port (A,B,C,D)
-#       The value the port is epected to have. If not it will print the erroneous actual value
-#       val is a signed value (-128 == 0x80)
-define expectSignedPORTA
     set $actual = {char}0x800022
     if $actual != $arg0
         set $passed = 0
@@ -193,7 +152,7 @@ define expectSignedPORTA
         x/1xb 0x800022
     end
 end
-define expectSignedPORTB
+define expectPORTB
     set $actual = {char}0x800025
     if $actual != $arg0
         set $passed = 0
@@ -202,7 +161,7 @@ define expectSignedPORTB
         x/1xb 0x800025
     end
 end
-define expectSignedPORTC
+define expectPORTC
     set $actual = {char}0x800028
     if $actual != $arg0
         set $passed = 0
@@ -211,7 +170,7 @@ define expectSignedPORTC
         x/1xb 0x800028
     end
 end
-define expectSignedPORTD
+define expectPORTD
     set $actual = {char}0x80002B
     if $actual != $arg0
         set $passed = 0
@@ -229,4 +188,3 @@ define expect
         output /d $arg0
     end
 end
-
